@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> E-Calc Scientific Calculator</title>
+</head>
+<body>
+
+    <div class="calculator">
+	 <h1>E-CALC</h1> 
+        <input type="text" id="display" readonly>
+<!-- ... (previous HTML code) ... -->
+<div class="buttons">
+    <button>7</button>
+    <button>8</button>
+    <button>9</button>
+    <button>/</button>
+
+    <button>4</button>
+    <button>5</button>
+    <button>6</button>
+    <button>*</button>
+
+    <button>1</button>
+    <button>2</button>
+    <button>3</button>
+    <button>+</button>
+
+    <button>0</button>
+    <button>.</button>
+    <button>=</button>
+    <button>-</button>
+
+    <button>Clear</button>
+    <button>(</button>
+    <button>)</button>
+    <button>sqrt</button>
+
+    <button>sin</button>
+    <button>cos</button>
+    <button>tan</button>
+    
+    <button>ln</button>
+    <button>log</button>
+    <button>^</button>
+    
+    <button>e</button>
+    <button>π</button>
+    <button>%</button>
+    
+    <button>1/x</button>
+    <button>exp</button>
+    <button>abs</button>
+</div>
+</div>
+</body>
+</html>
+<style>
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #f2f2f2;
+}
+
+/* ... (previous CSS rules) ... */
+
+.calculator {
+    width: 80%;
+    max-width: 400px; /* Adjust as needed for your design */
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    margin: 0 auto; /* Center the calculator horizontally */
+}
+
+h1 {
+    font-size: 24px;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+
+#display {
+    width: 90%;
+    padding: 10px;
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.buttons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    font-size: 18px;
+    border: none;
+    background-color: #eee;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #ddd;
+}
+
+</style>
+<script>
+
+
+const display = document.getElementById('display');
+const buttons = document.querySelectorAll('button');
+
+function degreesToRadians(degrees) {
+    return (degrees * Math.PI) / 180;
+}
+
+function evaluateExpression(expression) {
+    try {
+        return eval(expression);
+    } catch (error) {
+        return 'Error';
+    }
+}
+
+function roundResult(result) {
+    const epsilon = 1e-10; // Small value to consider as zero
+    if (Math.abs(result) < epsilon) {
+        return 0;
+    }
+    return result;
+}
+
+buttons.forEach((button) => {
+    button.addEventListener('click', () => {
+        const buttonText = button.innerText;
+        if (buttonText === '=') {
+            const result = evaluateExpression(display.value);
+            display.value = roundResult(result);
+        } else if (buttonText === 'Clear') {
+            display.value = '';
+        } else if (buttonText === 'sqrt') {
+            display.value = Math.sqrt(evaluateExpression(display.value));
+        } else if (buttonText === 'sin') {
+            const radians = degreesToRadians(evaluateExpression(display.value));
+            display.value = roundResult(Math.sin(radians));
+        } else if (buttonText === 'cos') {
+            const radians = degreesToRadians(evaluateExpression(display.value));
+            display.value = roundResult(Math.cos(radians));
+        } else if (buttonText === 'tan') {
+            const radians = degreesToRadians(evaluateExpression(display.value));
+            display.value = roundResult(Math.tan(radians));
+        } else if (buttonText === 'ln') {
+            display.value = roundResult(Math.log(evaluateExpression(display.value)));
+        } else if (buttonText === 'log') {
+            display.value = roundResult(Math.log10(evaluateExpression(display.value)));
+        } else if (buttonText === '^') {
+            display.value += '**';
+        } else if (buttonText === 'e') {
+            display.value = Math.E;
+        } else if (buttonText === 'π') {
+            display.value = Math.PI;
+        } else if (buttonText === '%') {
+            display.value = roundResult(evaluateExpression(display.value) / 100);
+        } else if (buttonText === '1/x') {
+            display.value = roundResult(1 / evaluateExpression(display.value));
+        } else if (buttonText === 'exp') {
+            display.value = roundResult(Math.exp(evaluateExpression(display.value)));
+        } else if (buttonText === 'abs') {
+            display.value = roundResult(Math.abs(evaluateExpression(display.value)));
+        } else {
+            display.value += buttonText;
+        }
+    });
+});
+
+
+</script>
